@@ -1,7 +1,7 @@
 workflows:
-  android-build:
+  android_build:
     name: Android Build
-    max_build_duration: 30
+    max_build_duration: 60
     environment:
       flutter: stable
     scripts:
@@ -9,8 +9,20 @@ workflows:
         script: flutter pub get
       - name: Build APK
         script: flutter build apk --release
-      - name: Build AAB
-        script: flutter build appbundle --release
     artifacts:
       - build/app/outputs/flutter-apk/app-release.apk
-      - build/app/outputs/bundle/release/app-release.aab
+
+  ios_unsigned_build:
+    name: iOS Unsigned Build
+    max_build_duration: 60
+    environment:
+      flutter: stable
+      xcode: latest
+    scripts:
+      - name: Get dependencies
+        script: flutter pub get
+      - name: Build iOS without codesigning
+        script: flutter build ios --release --no-codesign
+    artifacts:
+      - build/ios/iphoneos/*.app
+      - build/ios/ipa/*.ipa
